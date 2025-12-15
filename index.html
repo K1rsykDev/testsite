@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blood Family Hub</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <canvas id="snow"></canvas>
+  <header class="topbar">
+    <div class="logo">Blood <span>Family</span></div>
+    <nav class="nav" id="nav">
+      <a href="#home" data-section="home" class="nav-link">Головна</a>
+      <a href="#join" data-section="join" class="nav-link">Приєднатись</a>
+      <a href="#contracts" data-section="contracts" class="nav-link protected">Контракти</a>
+      <a href="#news" data-section="news" class="nav-link protected">Новини</a>
+      <a href="#giveaways" data-section="giveaways" class="nav-link protected">Розіграші</a>
+      <a href="#admin" data-section="admin" class="nav-link admin-only">Адмін-панель</a>
+    </nav>
+    <div class="actions">
+      <button id="roleBadge" class="chip">Гість</button>
+      <button id="burger" class="burger" aria-label="Меню">☰</button>
+    </div>
+  </header>
+
+  <main id="app">
+    <section id="home" class="page active">
+      <div class="grid hero">
+        <div>
+          <p class="eyebrow">GTA V RP Family</p>
+          <h1>BLOOD FAMILY HUB</h1>
+          <p class="lede">Темний стиль, червоні акценти, сила родини. Керуйте заявками, контрактами, новинами та розіграшами в одному місці.</p>
+          <div class="cta-row">
+            <button class="btn primary" data-section="join">Приєднатись</button>
+            <button class="btn ghost" id="adminLogin">Адмін-режим</button>
+          </div>
+          <div id="statusMessage" class="status-message"></div>
+        </div>
+        <div class="glass card highlight">
+          <h3>Швидкий доступ</h3>
+          <ul class="checks">
+            <li>Ролі: Guest, Applicant, Member, Admin</li>
+            <li>SPA-навігація</li>
+            <li>Локальне збереження стану</li>
+          </ul>
+          <button class="btn link" data-section="admin">Відкрити адмін-панель →</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="join" class="page">
+      <div class="section-heading">
+        <h2>Заявка в родину</h2>
+        <p>Заповни форму та очікуй схвалення адміном.</p>
+      </div>
+      <form id="joinForm" class="card form">
+        <div class="field"><label>NickName<input type="text" name="nickname" required /></label></div>
+        <div class="field"><label>Static ID<input type="text" name="sid" required /></label></div>
+        <div class="field"><label>Age<input type="number" name="age" min="16" required /></label></div>
+        <div class="field"><label>Timezone<input type="text" name="timezone" required /></label></div>
+        <div class="field"><label>How much can you play<input type="text" name="playtime" required /></label></div>
+        <div class="field"><label>Why do you want to join?<textarea name="reason" required></textarea></label></div>
+        <button class="btn primary" type="submit">Відправити</button>
+      </form>
+      <div id="applicationStatus" class="card subtle"></div>
+    </section>
+
+    <section id="contracts" class="page">
+      <div class="section-heading">
+        <h2>Контракти</h2>
+        <p>Звіти по роботі та виплати.</p>
+      </div>
+      <form id="contractForm" class="card form">
+        <div class="field"><label>Сума ($)<input type="number" name="amount" min="0" required /></label></div>
+        <div class="field"><label>Опис<input type="text" name="description" required /></label></div>
+        <div class="field"><label>Статус
+          <select name="status">
+            <option value="pending">Очікує</option>
+            <option value="paid">Виплачено</option>
+          </select>
+        </label></div>
+        <button class="btn primary" type="submit">Додати контракт</button>
+      </form>
+      <div id="contractList" class="grid cards"></div>
+    </section>
+
+    <section id="news" class="page">
+      <div class="section-heading">
+        <h2>Новини</h2>
+        <p>Оновлення сімʼї та важливі події.</p>
+      </div>
+      <form id="newsForm" class="card form admin-only">
+        <div class="field"><label>Дата<input type="date" name="date" required /></label></div>
+        <div class="field"><label>Заголовок<input type="text" name="title" required /></label></div>
+        <div class="field"><label>Текст<textarea name="body" required></textarea></label></div>
+        <button class="btn primary" type="submit">Додати новину</button>
+      </form>
+      <div id="newsList" class="grid cards"></div>
+    </section>
+
+    <section id="giveaways" class="page">
+      <div class="section-heading">
+        <h2>Розіграші</h2>
+        <p>Виконуй умови, слідкуй за таймерами та вигравай призи.</p>
+      </div>
+      <form id="giveawayForm" class="card form admin-only">
+        <div class="field"><label>Умова<input type="text" name="condition" required /></label></div>
+        <div class="field"><label>Таймер (дні)<input type="number" name="timer" min="1" required /></label></div>
+        <div class="field"><label>Приз<input type="text" name="prize" required /></label></div>
+        <button class="btn primary" type="submit">Створити розіграш</button>
+      </form>
+      <div id="giveawayList" class="grid cards"></div>
+    </section>
+
+    <section id="admin" class="page">
+      <div class="section-heading">
+        <h2>Адмін-панель</h2>
+        <p>Керування заявками, контрактами, новинами та розіграшами.</p>
+      </div>
+      <div class="grid admin-grid">
+        <div class="card">
+          <div class="card-header">
+            <h3>Заявки</h3>
+            <span class="pill" id="appCount">0</span>
+          </div>
+          <div id="adminApplications" class="stack"></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Користувач</h3>
+          </div>
+          <div class="stack">
+            <p>Поточна роль: <span id="currentRole">guest</span></p>
+            <div class="role-actions">
+              <button class="btn ghost" id="switchToGuest">Гість</button>
+              <button class="btn ghost" id="switchToMember">Member</button>
+              <button class="btn ghost" id="switchToAdmin">Admin</button>
+            </div>
+            <p class="muted">Використовуйте демо-кнопки для тесту логіки доступів.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Контракти</h3>
+            <span class="pill" id="adminContractCount">0</span>
+          </div>
+          <div id="adminContractList" class="stack"></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Новини</h3>
+          </div>
+          <div id="adminNewsList" class="stack"></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Розіграші</h3>
+          </div>
+          <div id="adminGiveawayList" class="stack"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
